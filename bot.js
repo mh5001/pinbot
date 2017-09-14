@@ -163,7 +163,16 @@ client.on('message', function(message) {
     } else if (input == prefix + 'skip') {
       message.channel.send({embed: {
         title: 'Attempting to skip!',
-        description: 'Skipping: **' + queue[0].name + '**'
+        fields: [
+          {
+            name: 'Skipping:',
+            value: 'Current item: **' + queue[0].name + '**'
+          },
+          {
+            name: 'Now Playing:',
+            value: 'Next item: **' + queue[1].name + '**'
+          }
+        ],
       }});
         dispatcher.end();
     } else if (input.startsWith(prefix + 'queuemax')) {
