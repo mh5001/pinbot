@@ -4,6 +4,7 @@ const moment = require("moment");
 const embed = new discord.RichEmbed();
 const ytdl = require('ytdl-core');
 const ytSearch = require('youtube-search');
+const ytPlaylist = require('youtube-playlist-info');
 
 const client = new discord.Client();
 const config = JSON.parse(fs.readFileSync("./settings.json", "utf-8"));
@@ -19,6 +20,8 @@ var ytSearchOpt = {
 var mess;
 const queue = [];
 var isPlaying = false;
+var dispatcher;
+var queueMax = 30;
 
 client.login(token);
 
@@ -94,9 +97,22 @@ client.on('message', function(message) {
       }
       ytSearch(args, ytSearchOpt, function(err, res) {
         if(err) return console.log(err);
-        console.log(res);
         if (res[0].kind == 'youtube#playlist') {
-          sendMes("`Does not support playlist at the moment!`");
+          ytPlaylist.playlistInfo(config.ytApi,res[0].id, function(res) {
+            var limitRes;
+            if (res.length > queueMax) {
+              limitRes = res.slice(0,queueMax);
+            }
+            limitRes.map(elements => {
+              toQueue(elements.resourceId.videoId,elements.title);
+            });
+            playStream(queue[0].id);
+            message.channel.send({embed: {
+              title: 'Fetching: __' + args + '__ playlist',
+              description: 'Play list is limited to maximum of: ' + queueMax,
+              color: 4359924
+            }});
+          });
           return;
         }
         if (res[0].description == '') {
@@ -140,11 +156,21 @@ client.on('message', function(message) {
         list.push("**" + x++ + " : **" + elements.name);
       });
       list = JSON.stringify(list).replace('[','').replace(']','').replace(/\,/g,'\n').replace(/\"/g,'');
-      console.log(list);
       sendMes({embed: {
         title: "Playing queue:",
         description: list
       }});
+    } else if (input == prefix + 'skip') {
+      message.channel.send({embed: {
+        title: 'Attempting to skip!',
+        description: 'Skipping: **' + queue[0].name + '**'
+      }});
+        playStream(queue[1].id)
+    } else if (input.startsWith(prefix + 'queuemax')) {
+      if (message.author.id == '163434302758060033') {
+        queueMax = args;
+        message.channel.send('`Set Queue Max to: ' + queueMax + '`')
+      }
     }
   }
 });
@@ -155,17 +181,14 @@ function sendMes(string) {
 
 function toQueue(id, name) {
   queue.push({"id": id, "name": name});
-  console.log(queue);
 }
 
 function playStream(id) {
-  console.log("Playing");
   mess.member.voiceChannel.join().then(function(connection) {
     isPlaying = true;
-    const dispatcher = connection.playStream(ytdl('https://www.youtube.com/watch?v=' + id, {filter: 'audioonly'}))
+    dispatcher = connection.playStream(ytdl('https://www.youtube.com/watch?v=' + id, {filter: 'audioonly'}))
     dispatcher.on('end', () => {
       isPlaying = false;
-      console.log("Ended");
       if (queue.length > 0) {
         queue.splice(0,1);
         setTimeout(playStream(queue[0].id),2000);
