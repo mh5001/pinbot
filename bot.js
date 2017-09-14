@@ -165,7 +165,7 @@ client.on('message', function(message) {
         title: 'Attempting to skip!',
         description: 'Skipping: **' + queue[0].name + '**'
       }});
-        playStream(queue[1].id)
+        dispatcher.end();
     } else if (input.startsWith(prefix + 'queuemax')) {
       if (message.author.id == '163434302758060033') {
         queueMax = args;
@@ -191,7 +191,7 @@ function playStream(id) {
       isPlaying = false;
       if (queue.length > 0) {
         queue.splice(0,1);
-        setTimeout(playStream(queue[0].id),2000);
+        playStream(queue[0].id)
       } else if (queue.lenght == 0) {
         sendMes({embed: {
           description: "Nothing left in queue",
