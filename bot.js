@@ -18,7 +18,7 @@ var ytSearchOpt = {
   key: ytApi
 }
 var mess;
-const queue = [];
+var queue = [];
 var isPlaying = false;
 var dispatcher;
 var queueMax = 30;
@@ -180,6 +180,10 @@ client.on('message', function(message) {
         queueMax = args;
         message.channel.send('`Set Queue Max to: ' + queueMax + '`')
       }
+    } else if (input == prefix + 'end') {
+      message.channel.send('`Ending all queues...`');
+      queue = [];
+      dispatcher.end();
     }
   }
 });
