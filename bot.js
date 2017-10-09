@@ -5,6 +5,8 @@ const embed = new discord.RichEmbed();
 const ytdl = require('ytdl-core');
 const ytSearch = require('youtube-search');
 const ytPlaylist = require('youtube-playlist-info');
+const spotSearch = require('spotify')
+const spotDown = require('spotify-mp3-playlist-downloader');
 
 const client = new discord.Client();
 const config = JSON.parse(fs.readFileSync("./settings.json", "utf-8"));
@@ -12,6 +14,8 @@ const token = config.token;
 const spamChannelID = JSON.parse(fs.readFileSync("./settings.json")).spamChannel;
 const prefix = config.prefix;
 const ytApi = config.ytApi;
+
+require('./textoff.js')
 
 var ytSearchOpt = {
   maxResults: 1,
@@ -26,7 +30,7 @@ var queueMax = 30;
 client.login(token);
 
 client.on("ready", function(){
-  console.log("NOOT NOOT!");
+  console.log("Main code loaded!");
   client.user.setPresence({game: {name: "Tik is bae", type: 0}});
 });
 
@@ -184,6 +188,18 @@ client.on('message', function(message) {
       message.channel.send('`Ending all queues...`');
       queue = [];
       dispatcher.end();
+    } else if (input.startsWith(prefix + 'spotify')) {
+      var type = args.split(',').slice(1).join(' ');
+      if (type == '') {
+        type = 'track';
+      }
+      spotSearch.search({type: type,query: args.split(',').slice(0,1).join(' ')},function(err,res) {
+        if (err) {
+          console.log(err);
+          return 0;
+        }
+        console.log(res);
+      });
     }
   }
 });
