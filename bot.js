@@ -15,7 +15,8 @@ const spamChannelID = JSON.parse(fs.readFileSync("./settings.json")).spamChannel
 const prefix = config.prefix;
 const ytApi = config.ytApi;
 
-require('./textoff.js')
+require('./textoff.js');
+require('./wotStat.js');
 
 var ytSearchOpt = {
   maxResults: 1,
