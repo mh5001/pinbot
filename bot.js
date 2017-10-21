@@ -17,6 +17,7 @@ const ytApi = config.ytApi;
 
 require('./textoff.js');
 require('./wotStat.js');
+require('./eval.js');
 
 var ytSearchOpt = {
   maxResults: 1,
