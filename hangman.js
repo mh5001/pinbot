@@ -141,22 +141,24 @@ client.on('message', message => {
         sendMes("`Please be wary that the game is still on!`");
       }
     }
-    if (!out.includes('-')) {
-      sendMes({embed: {
-        color: 8947499,
-        title: "👑 THE WORD WAS GUESSED! 👑",
-        description: `**${wordGuess.length}** attempts have been tried!`,
-        footer: {
-          text: `${client.user.username} will now stop reading chat!`
-        },
-        thumbnail: {
-          url: hangman(progress)
-        }
-      }});
-      chatListen = false;
-      progress = 0;
-      out = [];
-      return;
+    if (out !== null) {
+      if (!out.includes('-')) {
+        sendMes({embed: {
+          color: 8947499,
+          title: "👑 THE WORD WAS GUESSED! 👑",
+          description: `**${wordGuess.length}** attempts have been tried!`,
+          footer: {
+            text: `${client.user.username} will now stop reading chat!`
+          },
+          thumbnail: {
+            url: hangman(progress)
+          }
+        }});
+        chatListen = false;
+        progress = 0;
+        out = [];
+        return;
+      }
     }
 });
 
