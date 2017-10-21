@@ -58,6 +58,8 @@ client.on('message', message => {
           description: `Ending everything!`
         }});
         chatListen = false;
+        progress = 0;
+        out = [];
         return
       }
     }
@@ -65,21 +67,6 @@ client.on('message', message => {
     if (chatListen && word) {
       if (!out) {
         out = output.split('')
-      }
-      if (!out.includes('-')) {
-        sendMes({embed: {
-          color: 8947499,
-          title: "👑 THE WORD WAS GUESSED! 👑",
-          description: `**${wordGuess.length}** attempts have been tried!`,
-          footer: {
-            text: `${client.user.username} will now stop reading chat!`
-          },
-          thumbnail: {
-            url: hangman(progress)
-          }
-        }});
-        chatListen = false
-        return;
       }
       if (input.length == 1) {
         if (wordGuess.includes(input.toUpperCase())) {
@@ -131,6 +118,8 @@ client.on('message', message => {
               ]
             }});
             chatListen = false;
+            progress = 0;
+            out = [];
             return;
           }
           sendMes({embed: {
@@ -151,6 +140,23 @@ client.on('message', message => {
       } else if (message.author !== client.user) {
         sendMes("`Please be wary that the game is still on!`");
       }
+    }
+    if (!out.includes('-')) {
+      sendMes({embed: {
+        color: 8947499,
+        title: "👑 THE WORD WAS GUESSED! 👑",
+        description: `**${wordGuess.length}** attempts have been tried!`,
+        footer: {
+          text: `${client.user.username} will now stop reading chat!`
+        },
+        thumbnail: {
+          url: hangman(progress)
+        }
+      }});
+      chatListen = false;
+      progress = 0;
+      out = [];
+      return;
     }
 });
 
