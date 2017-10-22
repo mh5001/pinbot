@@ -141,7 +141,8 @@ client.on('message', message => {
         sendMes("`Please be wary that the game is still on!`");
       }
     }
-    if (out !== null) {
+    if (out !== undefined) {
+      console.log(out);
       if (!out.includes('-')) {
         sendMes({embed: {
           color: 8947499,
