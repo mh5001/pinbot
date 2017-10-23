@@ -19,6 +19,9 @@ require('./textoff.js');
 require('./wotStat.js');
 require('./eval.js');
 require('./hangman.js');
+require('./id.js');
+require('./findgame.js')
+
 
 var ytSearchOpt = {
   maxResults: 1,

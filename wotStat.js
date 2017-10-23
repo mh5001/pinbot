@@ -32,12 +32,16 @@ client.on('message', message => {
             return elements !== "";
           });
           if (result.length < 110) {
-            return message.channel.send("`Error occured: Player not in a clan!`")
+            return message.channel.send({embed: {
+              color: wn8Color(parseInt(result[103].replace(',',''))),
+              title: `Statistics For User: __${output.data[0].nickname}__ on The EU Server:`,
+              description: `\n**Nickname:**\t${output.data[0].nickname}\n**User ID:**\t${output.data[0].account_id}\n**Battles on Random:**${result[0]}\n\n**Win Rate:**${result[2]}\n**Hit Percentage:** ${result[4]}\n**Survived:** ${result[6]}\n\n**Average XP per Battle:** ${result[8]}\n**Damage Dealt over Received:** ${result[10]}\n**Average Damage:** ${result[12]}\n**Average Tank Destroyed per Battle:**${result[14]}\n**Average Tank Spotted per Battle:**${result[16]}\n**Average Base Reset:**${result[18]}\n**Average Base Captured:**${result[20]}\n**Kill to Death Ratio:**${result[22]}\n\n**Efficiency:**\t${result[95]} (${result[96]})\n**WN8:**\t${result[103]} (${result[104]})\n**WN7:**\t${result[99]} (${result[100]})`
+            }})
           }
           message.channel.send({embed: {
             color: wn8Color(parseInt(result[109].replace(',',''))),
             title: `Statistics For User: __${output.data[0].nickname}__ on The EU Server:`,
-            description: `\n**Nickname:**\t${output.data[0].nickname}\n**User ID:**\t${output.data[0].account_id}\n**Battles on Random:**${result[0]}\n\n**Win Rate:**${result[2]}\n**Hit Percentage:** ${result[4]}\n**Survived:** ${result[6]}\n\n**Average XP per Battle:** ${result[8]}\n**Damage Dealt over Received:** ${result[10]}\n**Average Damage:** ${result[12]}\n**Average Tank Destroyed per Battle:**${result[14]}\n**Average Tank Spotted per Battle:**${result[16]}\n**Average Base Reset:**${result[18]}\n**Average Base Captured:**${result[20]}\n**Kill to Death Ratio:**${result[22]}\n\n**Efficiency:**\t${result[101]} (${result[102]})\n**WN8:**\t${result[109]} (${result[110]})\n**WN7:**\t${result[105]} (${result[106]})`
+            description: `\n**Nickname:**\t${output.data[0].nickname}\n**User ID:**\t${output.data[0].account_id}\n**Battles on Random:**${result[0]}\n\n**Clan:**\t${result[89].replace(/\:/g,'')}\n**Date joined:**\t${result[91].replace(/\:/g,'')}\n**Role in clan:**\t${result[93].replace(/\:/g,'')}\n\n**Win Rate:**${result[2]}\n**Hit Percentage:** ${result[4]}\n**Survived:** ${result[6]}\n\n**Average XP per Battle:** ${result[8]}\n**Damage Dealt over Received:** ${result[10]}\n**Average Damage:** ${result[12]}\n**Average Tank Destroyed per Battle:**${result[14]}\n**Average Tank Spotted per Battle:**${result[16]}\n**Average Base Reset:**${result[18]}\n**Average Base Captured:**${result[20]}\n**Kill to Death Ratio:**${result[22]}\n\n**Efficiency:**\t${result[101]} (${result[102]})\n**WN8:**\t${result[109]} (${result[110]})\n**WN7:**\t${result[105]} (${result[106]})`
           }});
         });
       } else if (output.status == 'error') {
